@@ -5,11 +5,18 @@ namespace Rocket\Tests\Fixture\Resource;
 
 use Faker\Factory;
 use Rocket\Mapping as API;
+use Rocket\Tests\Fixture\Middleware\EchoMiddleware;
 
-#[API\Resource(path: "/author")]
+#[API\Resource(path: "/author", middlewares: [EchoMiddleware::class])]
 class Author
 {
     #[API\Id]
+    #[
+        API\SubResource(method: 'GET'),
+        API\SubResource(method: 'POST', middlewares: [EchoMiddleware::class]),
+        API\SubResource(method: 'PUT', middlewares: [EchoMiddleware::class]),
+        API\SubResource(method: 'DELETE', middlewares: [EchoMiddleware::class]),
+    ]
     public int $id;
     public string $name;
     /** @var Book[] */

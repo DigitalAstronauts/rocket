@@ -25,22 +25,43 @@ We want to build easy routing for this entities. With `Rocket` you should enrich
 ```php
 #[\Rocket\Mapping\Resource(path: "/authors")]
 class Author {  
+    #[\Rocket\Mapping\Id]
+    #[\Rocket\Mapping\SubResource]
     public int $id;
     public string $name;
     #[\Rocket\Mapping\SubResource(path: "books")]    
     public iterable $books;  
 }
-#[\Rocket\Mapping\Resource(path: "books")]
+
+#[
+    \Rocket\Mapping\Resource(method: 'GET', path: "/books", handler: 'YourRetrieveController'),
+    \Rocket\Mapping\Resource(method: 'POST', path: "/books", handler: 'YourCreateClass', middlewares: ['ProtectWriteMiddleware']),
+]
 class Book {
+    #[\Rocket\Mapping\Id]
+    #[
+        \Rocket\Mapping\SubResource(method: 'GET'),
+        \Rocket\Mapping\SubResource(method: 'PUT', middlewares: ['ProtectWriteMiddleware']),        
+        \Rocket\Mapping\SubResource(method: 'DELETE', middlewares: ['ProtectWriteMiddleware']),
+    ]
     public int $id;
     public string $name;
     public string $isbn;
 }
-$resourceCollection = (new \Rocket\MappingFactory)->create(
-    '<dir> of entities/resources',
-    'class namespace prefix'
-);
 ```
+
+With this definition you can build this routing table:
+
+| Method | Url path | Handler |
+| --- | --- | --- |
+| `*` | `/authors` | `null` |
+| `*` | `/authors/{id}` | `null` |
+| `*` | `/authors/{id}/books` | `null` |
+| `GET` | `/books` | `null` |
+| `POST` | `/books` | `null` |
+| `GET` | `/books/{id}` | `null` |
+| `PUT` | `/books/{id}` | `null` |
+| `DELETE` | `/books/{id}` | `null` |
 
 With this definition you can use `MappingFactory` to get resource collection.
 

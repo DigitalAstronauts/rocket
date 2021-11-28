@@ -35,6 +35,7 @@ class MappingFactoryTest extends TestCase
     {
         return [
             ['/author', 'GET'],
+            ['/author/{id}', 'GET'],
             ['/author', 'POST'],
             ['/author', 'PUT'],
             ['/author', 'DELETE'],
@@ -66,9 +67,10 @@ class MappingFactoryTest extends TestCase
                 }
             }
             foreach ($collection->getSubResourceList() as $subResource) {
+
                 $route = $router->map(
                     $subResource->method,
-                    sprintf('%s/{%s}/%s', $subResource->parentPath, $collection->getId()->name, $subResource->path),
+                    rtrim(sprintf('%s/{%s}/%s', $subResource->parentPath, $collection->getId()->name, $subResource->path), '/'),
                     $handler
                 );
                 foreach ($subResource->middlewares as $middleware) {
