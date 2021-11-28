@@ -1,0 +1,29 @@
+{
+    "name": "digitalastronauts/rocket",
+    "description": "API mapping implementation.",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Rocket\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Rocket\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Martin Krizan",
+            "email": "mnohosten@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "league/route": "^5.1",
+        "laminas/laminas-diactoros": "^2.8",
+        "fakerphp/faker": "^1.16"
+    },
+    "minimum-stability": "stable"
+}
